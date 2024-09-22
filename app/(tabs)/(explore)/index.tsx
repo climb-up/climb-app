@@ -8,14 +8,32 @@ import { FlatList, Pressable, View } from "react-native";
 
 type DataProps = ExploreMountainCardProps;
 
-const DATA: DataProps[] = [
+export const DATA: DataProps[] = [
 	{
 		id: "0",
 		name: "Wysoki Hrothgar",
 		pathCount: 20,
 		location: "Biała Grań",
 		backgroundImage:
-			"https://static.wikia.nocookie.net/elderscrolls/images/f/fd/Gard%C5%82o_%C5%9Awiata_%28Skyrim%29.jpg/revision/latest/scale-to-width-down/1200?cb=20171124170408&path-prefix=pl"
+			"https://static.wikia.nocookie.net/elderscrolls/images/f/fd/Gard%C5%82o_%C5%9Awiata_%28Skyrim%29.jpg/revision/latest/scale-to-width-down/1200?cb=20171124170408&path-prefix=pl",
+		nearbyMountains: [
+			{
+				id: "1",
+				name: "Wysoka twoja stara",
+				pathCount: 20,
+				location: "Biała Grań",
+				backgroundImage:
+					"https://static.wikia.nocookie.net/elderscrolls/images/f/fd/Gard%C5%82o_%C5%9Awiata_%28Skyrim%29.jpg/revision/latest/scale-to-width-down/1200?cb=20171124170408&path-prefix=pl"
+			},
+			{
+				id: "2",
+				name: "Wysoki Hrothgar",
+				pathCount: 20,
+				location: "Biała Grań",
+				backgroundImage:
+					"https://static.wikia.nocookie.net/elderscrolls/images/f/fd/Gard%C5%82o_%C5%9Awiata_%28Skyrim%29.jpg/revision/latest/scale-to-width-down/1200?cb=20171124170408&path-prefix=pl"
+			}
+		]
 	},
 	{
 		id: "1",
