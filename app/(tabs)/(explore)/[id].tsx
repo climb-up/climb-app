@@ -1,9 +1,9 @@
 import { Icon } from "@/components/Icon";
 import { ThemedSafeView } from "@/components/ThemedSafeView";
 import { ThemedText } from "@/components/ThemedText";
-import { Stack, useLocalSearchParams } from "expo-router";
+import { Link, Stack, useLocalSearchParams } from "expo-router";
 import { useEffect, useState } from "react";
-import { ActivityIndicator, ScrollView, View } from "react-native";
+import { ActivityIndicator, Pressable, ScrollView, View } from "react-native";
 import { DATA } from ".";
 import {
 	ExploreMountainCard,
@@ -22,7 +22,7 @@ function findMountainById(id: string) {
 
 export default function MountainPage() {
 	const iconColor = useThemeColor({}, "tint");
-	const { id, name } = useLocalSearchParams();
+	const { id } = useLocalSearchParams();
 	const [isLoaded, setIsLoaded] = useState(false);
 	const [mountain, setMountain] = useState<ExploreMountainCardProps>();
 
@@ -65,7 +65,7 @@ export default function MountainPage() {
 			>
 				<Stack.Screen
 					options={{
-						title: normalizeString(name)
+						title: mountain?.name
 					}}
 				/>
 				<ScrollView
@@ -95,7 +95,19 @@ export default function MountainPage() {
 					<ThemedText type="defaultSemiBold">Skały w pobliżu</ThemedText>
 					<View style={{ display: "flex", gap: 8 }}>
 						{mountain?.nearbyMountains?.map((mountain) => (
-							<ExploreMountainCard key={mountain.id} {...mountain} />
+							<Link
+								key={mountain.id}
+								push
+								href={{
+									pathname: "/[id]",
+									params: { id: mountain.id }
+								}}
+								asChild
+							>
+								<Pressable>
+									<ExploreMountainCard key={mountain.id} {...mountain} />
+								</Pressable>
+							</Link>
 						))}
 					</View>
 				</ScrollView>
