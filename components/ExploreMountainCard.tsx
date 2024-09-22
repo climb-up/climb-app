@@ -9,6 +9,7 @@ export type ExploreMountainCardProps = {
 	location: string;
 	pathCount: number;
 	backgroundImage: string;
+	nearbyMountains?: ExploreMountainCardProps[];
 };
 
 export function ExploreMountainCard(props: ExploreMountainCardProps) {
