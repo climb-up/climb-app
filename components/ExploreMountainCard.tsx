@@ -3,7 +3,7 @@ import { ThemedText } from "./ThemedText";
 import { ImageBackgroundWithGradient } from "./ImageBackgroundWithGradient";
 import { Icon } from "./Icon";
 
-type ExploreMountainCardProps = {
+export type ExploreMountainCardProps = {
 	name: string;
 	location: string;
 	pathCount: number;
