@@ -17,6 +17,12 @@ export default function ExploreStackLayout() {
 					title: "Odkrywaj"
 				}}
 			/>
+			<Stack.Screen
+				name="[id]"
+				options={{
+					title: "Sczegóły"
+				}}
+			/>
 		</Stack>
 	);
 }
