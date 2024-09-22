@@ -1,9 +1,14 @@
-import { ExploreMountainCard } from "@/components/ExploreMountainCard";
+import {
+	ExploreMountainCard,
+	type ExploreMountainCardProps
+} from "@/components/ExploreMountainCard";
 import { ThemedSafeView } from "@/components/ThemedSafeView";
 import { ThemedText } from "@/components/ThemedText";
 import { FlatList, View } from "react-native";
 
-const DATA = [
+type DataProps = ExploreMountainCardProps & { id: number };
+
+const DATA: DataProps[] = [
 	{
 		id: 0,
 		name: "Wysoki Hrothgar",
