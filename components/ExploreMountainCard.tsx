@@ -4,6 +4,7 @@ import { ImageBackgroundWithGradient } from "./ImageBackgroundWithGradient";
 import { Icon } from "./Icon";
 
 export type ExploreMountainCardProps = {
+	id: string;
 	name: string;
 	location: string;
 	pathCount: number;

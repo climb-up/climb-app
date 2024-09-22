@@ -6,11 +6,11 @@ import { ThemedSafeView } from "@/components/ThemedSafeView";
 import { ThemedText } from "@/components/ThemedText";
 import { FlatList, View } from "react-native";
 
-type DataProps = ExploreMountainCardProps & { id: number };
+type DataProps = ExploreMountainCardProps;
 
 const DATA: DataProps[] = [
 	{
-		id: 0,
+		id: "0",
 		name: "Wysoki Hrothgar",
 		pathCount: 20,
 		location: "Biała Grań",
@@ -18,7 +18,7 @@ const DATA: DataProps[] = [
 			"https://static.wikia.nocookie.net/elderscrolls/images/f/fd/Gard%C5%82o_%C5%9Awiata_%28Skyrim%29.jpg/revision/latest/scale-to-width-down/1200?cb=20171124170408&path-prefix=pl"
 	},
 	{
-		id: 1,
+		id: "1",
 		name: "Wysoki Hrothgar",
 		pathCount: 20,
 		location: "Biała Grań",
@@ -26,7 +26,7 @@ const DATA: DataProps[] = [
 			"https://static.wikia.nocookie.net/elderscrolls/images/f/fd/Gard%C5%82o_%C5%9Awiata_%28Skyrim%29.jpg/revision/latest/scale-to-width-down/1200?cb=20171124170408&path-prefix=pl"
 	},
 	{
-		id: 2,
+		id: "2",
 		name: "Wysoki Hrothgar",
 		pathCount: 20,
 		location: "Biała Grań",
@@ -34,7 +34,7 @@ const DATA: DataProps[] = [
 			"https://static.wikia.nocookie.net/elderscrolls/images/f/fd/Gard%C5%82o_%C5%9Awiata_%28Skyrim%29.jpg/revision/latest/scale-to-width-down/1200?cb=20171124170408&path-prefix=pl"
 	},
 	{
-		id: 3,
+		id: "3",
 		name: "Wysoki Hrothgar",
 		pathCount: 20,
 		location: "Biała Grań",
@@ -42,7 +42,7 @@ const DATA: DataProps[] = [
 			"https://static.wikia.nocookie.net/elderscrolls/images/f/fd/Gard%C5%82o_%C5%9Awiata_%28Skyrim%29.jpg/revision/latest/scale-to-width-down/1200?cb=20171124170408&path-prefix=pl"
 	},
 	{
-		id: 4,
+		id: "4",
 		name: "Wysoki Hrothgar",
 		pathCount: 20,
 		location: "Biała Grań",
@@ -66,7 +66,7 @@ export default function Index() {
 					ItemSeparatorComponent={() => <View style={{ height: 8 }} />}
 					data={DATA}
 					renderItem={({ item }) => <ExploreMountainCard {...item} />}
-					keyExtractor={(item) => item.id.toString()}
+					keyExtractor={(item) => item.id}
 				/>
 			</ThemedSafeView>
 		</>
