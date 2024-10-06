@@ -2,6 +2,7 @@ import { StyleSheet } from "react-native";
 import { Icon } from "@/components/Icon";
 import { ThemedSafeView } from "@/components/ThemedSafeView";
 import { ThemedText } from "@/components/ThemedText";
+import { Roads } from "@/components/rock/Roads";
 import { Link, Stack, useLocalSearchParams } from "expo-router";
 import { useEffect, useState } from "react";
 import {
@@ -38,6 +39,7 @@ export default function MountainPage() {
     if (!isLoaded) {
       const mountain = findMountainById(normalizeString(id));
       setMountain(mountain);
+
       setInterval(() => {
         setIsLoaded(true);
       }, 1000);
@@ -75,13 +77,16 @@ export default function MountainPage() {
             pathCount={mountain?.pathCount}
             location={mountain?.location}
           />
-          <View>
+          <View style={{ marginBottom: 16 }}>
             <Image
               source={{ uri: mountain?.backgroundImage }}
               style={styles.image}
             ></Image>
           </View>
-
+          <ThemedText style={{ marginBottom: 8 }} type="defaultSemiBold">
+            Drogi
+          </ThemedText>
+          <Roads roadsData={mountain?.roads} />
           <ThemedText type="defaultSemiBold">Skały w pobliżu</ThemedText>
           <View style={{ display: "flex", gap: 8 }}>
             {mountain?.nearbyMountains?.map((mountain) => (
