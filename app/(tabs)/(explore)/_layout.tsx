@@ -7,22 +7,22 @@ import { useColorScheme } from "@/hooks/useColorScheme";
 import { View, Text } from "react-native";
 
 export default function ExploreStackLayout() {
-	const colorScheme = useColorScheme();
+  const colorScheme = useColorScheme();
 
-	return (
-		<Stack>
-			<Stack.Screen
-				name="index"
-				options={{
-					title: "Odkrywaj"
-				}}
-			/>
-			<Stack.Screen
-				name="[id]"
-				options={{
-					title: "Sczegóły"
-				}}
-			/>
-		</Stack>
-	);
+  return (
+    <Stack>
+      <Stack.Screen
+        name="index"
+        options={{
+          title: "Odkrywaj",
+        }}
+      />
+      <Stack.Screen
+        name="[id]"
+        options={{
+          title: "",
+        }}
+      />
+    </Stack>
+  );
 }
