@@ -17,6 +17,8 @@ export const DATA: DataProps[] = [
     location: "Biała Grań",
     backgroundImage:
       "https://static.wikia.nocookie.net/elderscrolls/images/f/fd/Gard%C5%82o_%C5%9Awiata_%28Skyrim%29.jpg/revision/latest/scale-to-width-down/1200?cb=20171124170408&path-prefix=pl",
+    longitude: "50.02152",
+    latitude: "19.80401",
     roads: [],
     nearbyMountains: [
       {
@@ -44,6 +46,8 @@ export const DATA: DataProps[] = [
     location: "Piekary",
     backgroundImage:
       "https://topo.portalgorski.pl/images/item/150x100/480/844/480d844_piekary.png",
+    longitude: "50.02152",
+    latitude: "19.80401",
     roads: [
       {
         name: "Okrężne zacięcie",
@@ -69,6 +73,8 @@ export const DATA: DataProps[] = [
     location: "Trzebinia",
     backgroundImage:
       "https://topo.portalgorski.pl/images/item/150x100/504/8fb/504f8fb_balaton.png",
+    longitude: "49.83954",
+    latitude: "19.84719",
     roads: [
       {
         name: "Na szczyt",
@@ -94,6 +100,8 @@ export const DATA: DataProps[] = [
     location: "Piekary",
     backgroundImage:
       "https://topo.portalgorski.pl/images/item/150x100/aec/0b1/aecd0b1_piek_4.png",
+    longitude: "50.02152",
+    latitude: "19.80401",
     roads: [
       {
         name: "Płyta wiśniaka",

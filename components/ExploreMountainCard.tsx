@@ -11,6 +11,8 @@ export type ExploreMountainCardProps = {
   pathCount: number;
   backgroundImage: string;
   nearbyMountains?: ExploreMountainCardProps[];
+  longitude?: string;
+  latitude?: string;
   roads?: TRoads[];
 };
 
