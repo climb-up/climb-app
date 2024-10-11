@@ -20,6 +20,7 @@ import {
 import { Colors } from "@/constants/Colors";
 import { useThemeColor } from "@/hooks/useThemeColor";
 import { RockHeader } from "@/components/rock/RockHeader";
+import Weather from "@/components/rock/Weather";
 
 function normalizeString(str: string | string[]) {
   return Array.isArray(str) ? str.join(", ") : str;
@@ -87,6 +88,11 @@ export default function MountainPage() {
             Drogi
           </ThemedText>
           <Roads roadsData={mountain?.roads} />
+          <ThemedText type="defaultSemiBold">Pogoda</ThemedText>
+          <Weather
+            longitude={mountain?.longitude}
+            latitude={mountain?.latitude}
+          />
           <ThemedText type="defaultSemiBold">Skały w pobliżu</ThemedText>
           <View style={{ display: "flex", gap: 8 }}>
             {mountain?.nearbyMountains?.map((mountain) => (
