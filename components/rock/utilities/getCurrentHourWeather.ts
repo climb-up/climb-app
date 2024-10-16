@@ -1,10 +1,9 @@
-import { WeatherData } from "../Weather"; // Assuming the WeatherData type is defined in the Weather file
+import { WeatherData } from "../Weather";
 
 const getCurrentHourWeather = (weatherData: WeatherData) => {
   const now = new Date();
   const currentHour = now.getHours();
 
-  // Find the index that corresponds to the current hour
   const currentHourIndex = weatherData.hourly.time.findIndex(
     (time) =>
       time.getDate() === now.getDate() &&
@@ -13,19 +12,28 @@ const getCurrentHourWeather = (weatherData: WeatherData) => {
       time.getHours() === currentHour
   );
 
-  // If the current hour is found, return the weather data for that hour
   if (currentHourIndex !== -1) {
     return {
       time: weatherData.hourly.time[currentHourIndex],
-      temperature2m: weatherData.hourly.temperature2m[currentHourIndex],
-      relativeHumidity2m:
-        weatherData.hourly.relativeHumidity2m[currentHourIndex],
-      dewPoint2m: weatherData.hourly.dewPoint2m[currentHourIndex],
-      windSpeed10m: weatherData.hourly.windSpeed10m[currentHourIndex],
-      windSpeed80m: weatherData.hourly.windSpeed80m[currentHourIndex],
+      temperature2m: Math.round(
+        weatherData.hourly.temperature2m[currentHourIndex]
+      ),
+      relativeHumidity2m: Math.round(
+        weatherData.hourly.relativeHumidity2m[currentHourIndex]
+      ),
+      dewPoint2m: Math.round(weatherData.hourly.dewPoint2m[currentHourIndex]),
+      windSpeed10m: Math.round(
+        weatherData.hourly.windSpeed10m[currentHourIndex]
+      ),
+      windSpeed80m: Math.round(
+        weatherData.hourly.windSpeed80m[currentHourIndex]
+      ),
+      surfacePressure: Math.round(
+        weatherData.hourly.surfacePressure[currentHourIndex]
+      ),
+      weatherCode: weatherData.hourly.weatherCode[currentHourIndex],
     };
   } else {
-    // If no data for the current hour is found, return undefined or handle the error
     return undefined;
   }
 };

@@ -61,6 +61,7 @@ export const Roads = (props: IRoadsProps) => {
               <Image
                 source={getIconForType(item.type)}
                 style={styles.typeIcon}
+                resizeMode={"contain"}
               />
             )}
           </ThemedView>
@@ -91,6 +92,5 @@ const styles = StyleSheet.create({
   typeIcon: {
     height: 30,
     width: 30,
-    resizeMode: "contain",
   },
 });

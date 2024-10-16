@@ -88,12 +88,14 @@ export default function MountainPage() {
             Drogi
           </ThemedText>
           <Roads roadsData={mountain?.roads} />
-          <ThemedText type="defaultSemiBold">Pogoda</ThemedText>
+          <ThemedText style={{ marginBottom: 8 }} type="defaultSemiBold">
+            Pogoda
+          </ThemedText>
           <Weather
             longitude={mountain?.longitude}
             latitude={mountain?.latitude}
           />
-          <ThemedText type="defaultSemiBold">Skały w pobliżu</ThemedText>
+          {/* <ThemedText type="defaultSemiBold">Skały w pobliżu</ThemedText>
           <View style={{ display: "flex", gap: 8 }}>
             {mountain?.nearbyMountains?.map((mountain) => (
               <Link
@@ -110,7 +112,7 @@ export default function MountainPage() {
                 </Pressable>
               </Link>
             ))}
-          </View>
+          </View> */}
         </ScrollView>
       </ThemedSafeView>
     </>
