@@ -1,9 +1,11 @@
-import { useEffect, useRef } from "react";
+import { useState, useEffect, useRef } from "react";
 import getWeather from "./utilities/getWeather";
 import { ThemedView } from "../ThemedView";
 import { ThemedText } from "../ThemedText";
-import { View, StyleSheet, Image } from "react-native";
+import { View, StyleSheet, Image, ActivityIndicator } from "react-native";
 import getCurrentHourWeather from "./utilities/getCurrentHourWeather";
+import { THourlyWeatherData, TRockLocation } from "@/types/weather";
+import { useThemeColor } from "@/hooks/useThemeColor";
 
 // @ts-ignore
 import DewIcon from "../../assets/images/dew.png";
@@ -14,64 +16,64 @@ import HumidityIcon from "../../assets/images/humidity.png";
 // @ts-ignore
 import SunBehindCloud from "../../assets/images/sunBehindCloud.png";
 
-export type TWeatherProps = {
-  longitude?: string;
-  latitude?: string;
-};
+const Weather = ({ latitude, longitude }: TRockLocation) => {
+  const [hourlyWeather, setHourlyWeather] = useState<THourlyWeatherData | null>(
+    null
+  );
+  const [loading, setLoading] = useState(false);
 
-export type WeatherData = {
-  hourly: {
-    time: Date[];
-    temperature2m: Float32Array;
-    relativeHumidity2m: Float32Array;
-    dewPoint2m: Float32Array;
-    windSpeed10m: Float32Array;
-    windSpeed80m: Float32Array;
-    surfacePressure: Float32Array;
-    weatherCode: Float32Array;
+  const iconColor = useThemeColor({}, "tint");
+  const isLoaded = useState(false);
+
+  const fetchWeather = async () => {
+    setLoading(true);
+
+    try {
+      const weatherData = await getWeather({ latitude, longitude });
+
+      if (!weatherData) {
+        throw new Error("No weather data received");
+      }
+      const todaysWeather = getCurrentHourWeather(weatherData);
+
+      if (!todaysWeather) {
+        throw new Error("No hourly weather data available");
+      }
+
+      setHourlyWeather(todaysWeather);
+    } catch (error) {
+      console.error("Failed to fetch weather data:", error);
+    } finally {
+      setLoading(false);
+    }
   };
-};
-
-type HourlyWeatherData = {
-  time: Date;
-  temperature2m: number;
-  relativeHumidity2m: number;
-  dewPoint2m: number;
-  windSpeed10m: number;
-  windSpeed80m: number;
-  surfacePressure: number;
-};
-
-const Weather = ({ latitude, longitude }: TWeatherProps) => {
-  const hourlyWeatherRef = useRef<HourlyWeatherData | undefined>();
 
   useEffect(() => {
-    const fetchWeather = async () => {
-      try {
-        const weatherData = await getWeather(latitude, longitude);
-        const todaysWeather = getCurrentHourWeather(weatherData);
-        hourlyWeatherRef.current = todaysWeather;
-        console.log(todaysWeather);
-      } catch (error) {
-        console.error("Failed to fetch weather data:", error);
-      }
-    };
-
-    fetchWeather();
+    if (latitude && longitude) {
+      fetchWeather();
+    }
   }, [latitude, longitude]);
+
+  if (!isLoaded) {
+    return (
+      <ThemedView style={styles.weatherDetialsContainer}>
+        <ActivityIndicator size="large" color={iconColor} />
+      </ThemedView>
+    );
+  }
 
   return (
     <ThemedView style={styles.weatherDetialsContainer}>
       <View style={styles.weatherIconContainer}>
         <View style={styles.weatherIconWrapper}>
-          <ThemedText type="title">{`${hourlyWeatherRef.current?.temperature2m} °C`}</ThemedText>
+          <ThemedText type="title">{`${hourlyWeather?.temperature2m} °C`}</ThemedText>
           <Image
             source={SunBehindCloud}
             resizeMode="contain"
             style={styles.weatherIcon}
           />
         </View>
-        <ThemedText type="defaultSemiBold">{`${hourlyWeatherRef.current?.surfacePressure} hPa`}</ThemedText>
+        <ThemedText type="defaultSemiBold">{`${hourlyWeather?.surfacePressure} hPa`}</ThemedText>
       </View>
       <View>
         <View style={styles.weatherDetailLabelWraper}>
@@ -81,7 +83,7 @@ const Weather = ({ latitude, longitude }: TWeatherProps) => {
             style={styles.weatherDetailsIcon}
             alt="Dew icon"
           />
-          <ThemedText type="defaultSemiBold">{`Punkt rosy: ${hourlyWeatherRef.current?.dewPoint2m} C`}</ThemedText>
+          <ThemedText type="defaultSemiBold">{`Punkt rosy: ${hourlyWeather?.dewPoint2m} C`}</ThemedText>
         </View>
         <View style={styles.weatherDetailLabelWraper}>
           <Image
@@ -90,7 +92,7 @@ const Weather = ({ latitude, longitude }: TWeatherProps) => {
             style={styles.weatherDetailsIcon}
             alt="Humidity icon"
           />
-          <ThemedText type="defaultSemiBold">{`Wilgotność: ${hourlyWeatherRef.current?.relativeHumidity2m}%`}</ThemedText>
+          <ThemedText type="defaultSemiBold">{`Wilgotność: ${hourlyWeather?.relativeHumidity2m}%`}</ThemedText>
         </View>
         <View style={styles.weatherDetailLabelWraper}>
           <Image
@@ -99,7 +101,7 @@ const Weather = ({ latitude, longitude }: TWeatherProps) => {
             style={styles.weatherDetailsIcon}
             alt="Wind icon"
           />
-          <ThemedText type="defaultSemiBold">{`Wiatr: ${hourlyWeatherRef.current?.windSpeed10m} m/s`}</ThemedText>
+          <ThemedText type="defaultSemiBold">{`Wiatr: ${hourlyWeather?.windSpeed10m} m/s`}</ThemedText>
         </View>
       </View>
     </ThemedView>

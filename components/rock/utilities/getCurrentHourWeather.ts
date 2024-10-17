@@ -1,6 +1,6 @@
-import { WeatherData } from "../Weather";
+import { TWeatherData } from "@/types/weather";
 
-const getCurrentHourWeather = (weatherData: WeatherData) => {
+const getCurrentHourWeather = (weatherData: TWeatherData) => {
   const now = new Date();
   const currentHour = now.getHours();
 
@@ -34,7 +34,7 @@ const getCurrentHourWeather = (weatherData: WeatherData) => {
       weatherCode: weatherData.hourly.weatherCode[currentHourIndex],
     };
   } else {
-    return undefined;
+    return null;
   }
 };
 
