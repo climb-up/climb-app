@@ -7,7 +7,7 @@ export type TWeatherData = {
     windSpeed10m: Float32Array;
     windSpeed80m: Float32Array;
     surfacePressure: Float32Array;
-    weatherCode: Float32Array;
+    weatherCode: string[];
   };
 };
 
@@ -20,6 +20,11 @@ export type THourlyWeatherData = {
   windSpeed80m: number;
   surfacePressure: number;
 };
+
+export enum EDayTime {
+  Day = "d",
+  Night = "n",
+}
 
 export type TRockLocation = {
   longitude: string | undefined;

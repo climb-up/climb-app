@@ -6,6 +6,8 @@ import { View, StyleSheet, Image, ActivityIndicator } from "react-native";
 import getCurrentHourWeather from "./utilities/getCurrentHourWeather";
 import { THourlyWeatherData, TRockLocation } from "@/types/weather";
 import { useThemeColor } from "@/hooks/useThemeColor";
+import getWeatherIcon from "./utilities/getWeatherIcon";
+import { EDayTime } from "@/types/weather";
 
 // @ts-ignore
 import DewIcon from "../../assets/images/dew.png";
@@ -21,6 +23,7 @@ const Weather = ({ latitude, longitude }: TRockLocation) => {
     null
   );
   const [loading, setLoading] = useState(false);
+  const [weatherIcon, setWeatherIcon] = useState("");
 
   const iconColor = useThemeColor({}, "tint");
   const isLoaded = useState(false);
@@ -41,6 +44,18 @@ const Weather = ({ latitude, longitude }: TRockLocation) => {
       }
 
       setHourlyWeather(todaysWeather);
+
+      const todaysWeatherIcon = await getWeatherIcon(
+        todaysWeather.weatherCode,
+        EDayTime.Day
+      );
+
+      if (!todaysWeatherIcon) {
+        setWeatherIcon(""); // to do ogarnąć jakąś iconke gdy nie ma ikonki
+        throw new Error("No weather icon available");
+      }
+
+      setWeatherIcon(todaysWeatherIcon);
     } catch (error) {
       console.error("Failed to fetch weather data:", error);
     } finally {
@@ -68,7 +83,7 @@ const Weather = ({ latitude, longitude }: TRockLocation) => {
         <View style={styles.weatherIconWrapper}>
           <ThemedText type="title">{`${hourlyWeather?.temperature2m} °C`}</ThemedText>
           <Image
-            source={SunBehindCloud}
+            source={{ uri: weatherIcon }}
             resizeMode="contain"
             style={styles.weatherIcon}
           />
@@ -129,8 +144,8 @@ const styles = StyleSheet.create({
     gap: 4,
   },
   weatherIcon: {
-    height: 30,
-    width: 30,
+    height: 60,
+    width: 60,
   },
   weatherDetailsIcon: {
     height: 16,

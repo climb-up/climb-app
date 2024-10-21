@@ -1,6 +1,22 @@
 import { fetchWeatherApi } from "openmeteo";
 import { TWeatherData, TRockLocation } from "@/types/weather";
 
+// to do ujednolicić api pogodowe, jeśli sie da i ma sens przejść na to co ikonki z niego są bo w tym nie ma ikonek
+
+const formatWeatherCode = (
+  weatherCodesArr: Float32Array | null | undefined
+): string[] => {
+  if (!weatherCodesArr) return [];
+
+  return Array.from(weatherCodesArr, (value) => {
+    if (value < 10) {
+      return value.toFixed(0).padStart(2, "0");
+    } else {
+      return value.toFixed(0);
+    }
+  });
+};
+
 const getWeather = async (
   location: TRockLocation
 ): Promise<TWeatherData | null> => {
@@ -44,6 +60,10 @@ const getWeather = async (
     const range = (start: number, stop: number, step: number) =>
       Array.from({ length: (stop - start) / step }, (_, i) => start + i * step);
 
+    const formatedWeatherCodes = formatWeatherCode(
+      hourly?.variables(6)?.valuesArray()
+    );
+
     const weatherData: TWeatherData = {
       hourly: {
         time: range(
@@ -59,7 +79,7 @@ const getWeather = async (
         windSpeed80m: hourly.variables(4)?.valuesArray() || new Float32Array(),
         surfacePressure:
           hourly.variables(5)?.valuesArray() || new Float32Array(),
-        weatherCode: hourly.variables(6)?.valuesArray() || new Float32Array(),
+        weatherCode: formatedWeatherCodes,
       },
     };
 
