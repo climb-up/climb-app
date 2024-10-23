@@ -15,21 +15,19 @@ import DewIcon from "../../assets/images/dew.png";
 import WindIcon from "../../assets/images/wind.png";
 // @ts-ignore
 import HumidityIcon from "../../assets/images/humidity.png";
-// @ts-ignore
-import SunBehindCloud from "../../assets/images/sunBehindCloud.png";
 
 const Weather = ({ latitude, longitude }: TRockLocation) => {
   const [hourlyWeather, setHourlyWeather] = useState<THourlyWeatherData | null>(
     null
   );
-  const [loading, setLoading] = useState(false);
+
   const [weatherIcon, setWeatherIcon] = useState("");
 
   const iconColor = useThemeColor({}, "tint");
-  const isLoaded = useState(false);
+  const [isLoaded, setIsLoaded] = useState(false);
 
   const fetchWeather = async () => {
-    setLoading(true);
+    setIsLoaded(false);
 
     try {
       const weatherData = await getWeather({ latitude, longitude });
@@ -51,15 +49,15 @@ const Weather = ({ latitude, longitude }: TRockLocation) => {
       );
 
       if (!todaysWeatherIcon) {
-        setWeatherIcon(""); // to do ogarnąć jakąś iconke gdy nie ma ikonki
+        setWeatherIcon(""); // TODO ogarnąć jakąś iconke gdy nie ma ikonki
         throw new Error("No weather icon available");
       }
 
       setWeatherIcon(todaysWeatherIcon);
     } catch (error) {
-      console.error("Failed to fetch weather data:", error);
+      console.error("Failed to fetch weather data:", error); // TODO ogarnąć ekran gyd pogda się nie wczyta
     } finally {
-      setLoading(false);
+      setIsLoaded(true);
     }
   };
 
@@ -71,7 +69,7 @@ const Weather = ({ latitude, longitude }: TRockLocation) => {
 
   if (!isLoaded) {
     return (
-      <ThemedView style={styles.weatherDetialsContainer}>
+      <ThemedView style={styles.weatherLoaderWrapper}>
         <ActivityIndicator size="large" color={iconColor} />
       </ThemedView>
     );
@@ -154,5 +152,10 @@ const styles = StyleSheet.create({
   weatherIconContainer: {
     display: "flex",
     justifyContent: "space-between",
+  },
+  weatherLoaderWrapper: {
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
   },
 });
