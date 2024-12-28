@@ -2,21 +2,9 @@ import { View, StyleSheet } from "react-native";
 import { ThemedText } from "./ThemedText";
 import { ImageBackgroundWithGradient } from "./ImageBackgroundWithGradient";
 import { Icon } from "./Icon";
-import { TRoads } from "./rock/Roads";
+import { TRocksData } from "@/types/rocksData";
 
-export type ExploreMountainCardProps = {
-  id: string;
-  name: string;
-  location: string;
-  pathCount: number;
-  backgroundImage: string;
-  nearbyMountains?: ExploreMountainCardProps[];
-  longitude?: string;
-  latitude?: string;
-  roads?: TRoads[];
-};
-
-export function ExploreMountainCard(props: ExploreMountainCardProps) {
+export function ExploreMountainCard(props: TRocksData) {
   return (
     <View style={styles.view}>
       <ImageBackgroundWithGradient

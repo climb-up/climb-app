@@ -1,7 +1,8 @@
-import { FlatList, Pressable, View, StyleSheet, Image } from "react-native";
+import { FlatList, View, StyleSheet, Image } from "react-native";
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedSafeView } from "../ThemedSafeView";
 import { ThemedView } from "../ThemedView";
+import { IRoadsProps, ERoadType } from "../../types/rocksData";
 
 // @ts-ignore
 import BoulderIcon from "../../assets/images/BoulderIcon.png";
@@ -9,23 +10,6 @@ import BoulderIcon from "../../assets/images/BoulderIcon.png";
 import DrytoolIcon from "../../assets/images/DrytoolIcon.png";
 // @ts-ignore
 import TradIcon from "../../assets/images/TradIcon.png";
-
-export enum ERoadType {
-  Boulder = "Boulder",
-  Trad = "Trad",
-  Drytool = "Drytool",
-  Sport = "Sport",
-}
-
-export type TRoads = {
-  name?: string;
-  level?: string;
-  type?: ERoadType;
-};
-
-interface IRoadsProps {
-  roadsData: TRoads[] | undefined;
-}
 
 export const Roads = (props: IRoadsProps) => {
   const { roadsData } = props;
@@ -43,8 +27,8 @@ export const Roads = (props: IRoadsProps) => {
     }
   };
 
-  return (
-    <ThemedSafeView style={{ marginBottom: 16 }}>
+  const renderRoads = () => {
+    return (
       <FlatList
         style={{ width: "100%" }}
         ItemSeparatorComponent={() => <View style={{ height: 16 }} />}
@@ -67,6 +51,18 @@ export const Roads = (props: IRoadsProps) => {
           </ThemedView>
         )}
       />
+    );
+  };
+
+  return (
+    <ThemedSafeView style={{ marginBottom: 16 }}>
+      {roadsData && roadsData.length > 0 ? (
+        renderRoads()
+      ) : (
+        <ThemedText style={styles.emptyRoadsText}>
+          Nie znaleziono dróg dla tej skały
+        </ThemedText>
+      )}
     </ThemedSafeView>
   );
 };
@@ -92,5 +88,8 @@ const styles = StyleSheet.create({
   typeIcon: {
     height: 30,
     width: 30,
+  },
+  emptyRoadsText: {
+    textAlign: "center",
   },
 });
