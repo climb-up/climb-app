@@ -1,123 +1,55 @@
-import { useRef } from "react";
-import { type ExploreMountainCardProps } from "@/components/ExploreMountainCard";
+import { useRef, useState } from "react";
 import { ThemedSafeView } from "@/components/ThemedSafeView";
 import { ThemedText } from "@/components/ThemedText";
-import { Link } from "expo-router";
-import { StyleSheet, View, Image, Text } from "react-native";
-import { ERoadType } from "../../../components/rock/Roads";
+import { StyleSheet, Image } from "react-native";
 import MapView from "react-native-maps";
 import { Marker } from "react-native-maps";
 import { Modalize } from "react-native-modalize";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { Colors } from "@/constants/Colors";
 import { useColorScheme } from "@/hooks/useColorScheme";
-
 import { RockHeader } from "@/components/rock/RockHeader";
 import { Roads } from "../../../components/rock/Roads";
+import { useRouter } from "expo-router";
+import { TouchableOpacity } from "react-native";
+import { ROCKS_DATA } from "../../../constants/RocksData";
+import { TRoads } from "@/types/rocksData";
 
-type DataProps = ExploreMountainCardProps;
-
-export const DATA: DataProps[] = [
-  {
-    id: "0",
-    name: "Wysoki Hrothgar",
-    pathCount: 3,
-    location: "Biała Grań",
-    backgroundImage:
-      "https://static.wikia.nocookie.net/elderscrolls/images/f/fd/Gard%C5%82o_%C5%9Awiata_%28Skyrim%29.jpg/revision/latest/scale-to-width-down/1200?cb=20171124170408&path-prefix=pl",
-    longitude: 20.352000832095047,
-    latitude: 50.02574557925972,
-    roads: [],
-  },
-  {
-    id: "3",
-    name: "Okrężek",
-    pathCount: 15,
-    location: "Piekary",
-    backgroundImage:
-      "https://topo.portalgorski.pl/images/item/150x100/480/844/480d844_piekary.png",
-    longitude: 19.946949473643198,
-    latitude: 50.06614396836268,
-    roads: [
-      {
-        name: "Okrężne zacięcie",
-        type: ERoadType.Trad,
-        level: "V",
-      },
-      {
-        name: "Noc nad Wisłą",
-        type: ERoadType.Boulder,
-        level: "VI.1+",
-      },
-      {
-        name: "Melonizm",
-        type: ERoadType.Drytool,
-        level: "VI.2+",
-      },
-    ],
-  },
-  {
-    id: "4",
-    name: "Balaton",
-    pathCount: 13,
-    location: "Trzebinia",
-    backgroundImage:
-      "https://topo.portalgorski.pl/images/item/150x100/504/8fb/504f8fb_balaton.png",
-    longitude: 20.194925819793564,
-    latitude: 50.102449695731316,
-    roads: [
-      {
-        name: "Na szczyt",
-        type: ERoadType.Trad,
-        level: "III",
-      },
-      {
-        name: "Lewa Rysa",
-        type: ERoadType.Boulder,
-        level: "V+",
-      },
-      {
-        name: "Prawy do Lewego",
-        type: ERoadType.Drytool,
-        level: "IV",
-      },
-    ],
-  },
-  {
-    id: "5",
-    name: "Fudalowa Skała",
-    pathCount: 9,
-    location: "Piekary",
-    backgroundImage:
-      "https://topo.portalgorski.pl/images/item/150x100/aec/0b1/aecd0b1_piek_4.png",
-    longitude: 19.749803710397284,
-    latitude: 50.05865511176557,
-    roads: [
-      {
-        name: "Płyta wiśniaka",
-        type: ERoadType.Trad,
-        level: "VI",
-      },
-      {
-        name: "Filar Nowodworczyków",
-        type: ERoadType.Boulder,
-        level: "III+",
-      },
-      {
-        name: "N.N.",
-        type: ERoadType.Drytool,
-        level: "VI.3+",
-      },
-    ],
-  },
-];
+type TRockModalData = {
+  id: string;
+  name: string;
+  pathCount: number;
+  location: string;
+  backgroundImage: string;
+  roads: TRoads[];
+} | null;
 
 export default function Index() {
+  const [activeMarker, setActiveMarker] = useState<TRockModalData>(null);
+  const router = useRouter();
   const modalizeRef = useRef<Modalize>(null);
   const colorScheme = useColorScheme();
 
-  const onOpen = () => {
+  const navigateToExplore = (id: string) => {
+    router.push(`/(tabs)/(explore)/${id}`);
+  };
+
+  const onOpenModal = (id: string) => {
+    handleActiveMarker(id);
     modalizeRef.current?.open();
+  };
+
+  const handleActiveMarker = (id: string) => {
+    const activeMarkerData = ROCKS_DATA.find((rock) => rock.id === id);
+    if (!activeMarkerData) return;
+    setActiveMarker({
+      id: id,
+      name: activeMarkerData.name,
+      pathCount: activeMarkerData.pathCount,
+      location: activeMarkerData.location,
+      backgroundImage: activeMarkerData.backgroundImage,
+      roads: activeMarkerData.roads ?? [],
+    });
   };
 
   return (
@@ -131,14 +63,22 @@ export default function Index() {
             backgroundColor: Colors[colorScheme ?? "light"].background,
           }}
         >
-          <RockHeader name="Okrężek" pathCount={16} location="Tatry Wysokie" />
+          <RockHeader
+            name={activeMarker?.name}
+            pathCount={activeMarker?.pathCount}
+            location={activeMarker?.location}
+          />
 
           <Image
-            source={{ uri: DATA[0].backgroundImage }}
+            source={{ uri: activeMarker?.backgroundImage }}
             style={styles.modalRockImage}
           />
-          <Roads roadsData={DATA[1].roads} />
-          <ThemedText style={styles.rockLink}>Zobacz profil</ThemedText>
+          <Roads roadsData={activeMarker ? activeMarker.roads : []} />
+          <TouchableOpacity
+            onPress={() => navigateToExplore(activeMarker?.id ?? "0")}
+          >
+            <ThemedText style={styles.rockLink}>Zobacz profil</ThemedText>
+          </TouchableOpacity>
         </Modalize>
         <MapView
           initialRegion={{
@@ -149,14 +89,14 @@ export default function Index() {
           }}
           style={styles.map}
         >
-          {DATA.map((marker, index) => (
+          {ROCKS_DATA.map((marker, index) => (
             <Marker
               key={index}
               coordinate={{
                 latitude: +marker.latitude,
                 longitude: +marker.longitude,
               }}
-              onPress={onOpen}
+              onPress={() => onOpenModal(marker.id)}
             />
           ))}
         </MapView>
@@ -181,7 +121,6 @@ const styles = StyleSheet.create({
   },
   regionWrapper: {
     display: "flex",
-    // alignItems: "center",
     gap: 2,
   },
   modalRockImage: {
