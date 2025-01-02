@@ -1,7 +1,7 @@
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react";
 import { ThemedSafeView } from "@/components/ThemedSafeView";
 import { ThemedText } from "@/components/ThemedText";
-import { StyleSheet, Image } from "react-native";
+import { StyleSheet, Image, LogBox } from "react-native";
 import MapView from "react-native-maps";
 import { Marker } from "react-native-maps";
 import { Modalize } from "react-native-modalize";
@@ -51,6 +51,10 @@ export default function Index() {
       roads: activeMarkerData.roads ?? [],
     });
   };
+
+  useEffect(() => {
+    LogBox.ignoreLogs(["VirtualizedLists should never be nested"]);
+  }, []);
 
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
