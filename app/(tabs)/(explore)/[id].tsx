@@ -4,7 +4,13 @@ import { ThemedText } from "@/components/ThemedText";
 import { Roads } from "@/components/rock/Roads";
 import { useLocalSearchParams } from "expo-router";
 import { useEffect, useState } from "react";
-import { ActivityIndicator, Image, ScrollView, View } from "react-native";
+import {
+  ActivityIndicator,
+  Image,
+  ScrollView,
+  View,
+  LogBox,
+} from "react-native";
 import { ROCKS_DATA } from "@/constants/RocksData";
 import { TRocksData } from "@/types/rocksData";
 import { useThemeColor } from "@/hooks/useThemeColor";
@@ -35,6 +41,10 @@ export default function MountainPage() {
       }, 1000);
     }
   }, [isLoaded]);
+
+  useEffect(() => {
+    LogBox.ignoreLogs(["VirtualizedLists should never be nested"]);
+  }, []);
 
   if (!isLoaded) {
     return (
