@@ -80,7 +80,7 @@ export default function MountainPage() {
           <Image
             source={{ uri: mountain?.backgroundImage }}
             style={styles.image}
-          ></Image>
+          />
         </View>
         <ThemedText style={{ marginBottom: 8 }} type="defaultSemiBold">
           Drogi

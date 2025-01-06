@@ -27,6 +27,6 @@ export enum EDayTime {
 }
 
 export type TRockLocation = {
-  longitude: string | undefined;
-  latitude: string | undefined;
+  longitude: number | undefined;
+  latitude: number | undefined;
 };

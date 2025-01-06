@@ -1,5 +1,4 @@
 import { Stack } from "expo-router";
-import React from "react";
 
 export default function ExploreStackLayout() {
   return (
@@ -7,7 +6,6 @@ export default function ExploreStackLayout() {
       <Stack.Screen
         name="index"
         options={{
-          title: "map",
           headerShown: false,
         }}
       />
