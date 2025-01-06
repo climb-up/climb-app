@@ -1,4 +1,4 @@
-import { Stack, Tabs } from "expo-router";
+import { Tabs } from "expo-router";
 import React from "react";
 
 import { TabBarIcon } from "@/components/navigation/TabBarIcon";
@@ -22,7 +22,7 @@ export default function TabLayout() {
       <Tabs.Screen
         name="(explore)"
         options={{
-          title: "Home",
+          title: "Start",
           tabBarIcon: ({ color, size }) => (
             <TabBarIcon name={"home"} color={color} size={size} />
           ),
@@ -31,7 +31,7 @@ export default function TabLayout() {
       <Tabs.Screen
         name="(map)"
         options={{
-          title: "Map",
+          title: "Mapa",
           headerShown: false,
           tabBarIcon: ({ color, size }) => (
             <TabBarIcon name={"map"} color={color} size={size} />
@@ -41,7 +41,7 @@ export default function TabLayout() {
       <Tabs.Screen
         name="account"
         options={{
-          title: "Account",
+          title: "Profil",
           tabBarIcon: ({ color, size }) => (
             <TabBarIcon name={"person"} color={color} size={size} />
           ),
