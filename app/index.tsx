@@ -1,9 +1,12 @@
 import { StyleSheet, View, TouchableOpacity, Text } from "react-native";
 import { ImageBackground } from "react-native";
+import { useRouter } from "expo-router";
 import images from "@/constants/Images";
 import { Colors } from "@/constants/Colors";
 
 const Welcome = () => {
+  const router = useRouter();
+
   return (
     <View style={styles.welcomeContainer}>
       <ImageBackground
@@ -11,12 +14,18 @@ const Welcome = () => {
         style={styles.welcomeContainer}
       />
       <View style={styles.buttonsWrapper}>
-        <TouchableOpacity style={[styles.button, styles.buttonBackgroundDark]}>
+        <TouchableOpacity
+          onPress={() => router.push("/(auth)/sign-in")}
+          style={[styles.button, styles.buttonBackgroundDark]}
+        >
           <Text style={[styles.buttonText, styles.buttonTextLight]}>
             Zaloguj się
           </Text>
         </TouchableOpacity>
-        <TouchableOpacity style={[styles.button, styles.buttonBackgroundLight]}>
+        <TouchableOpacity
+          onPress={() => router.push("/(auth)/sign-up")}
+          style={[styles.button, styles.buttonBackgroundLight]}
+        >
           <Text style={[styles.buttonText, styles.buttonTextDark]}>
             Zarejestruj się
           </Text>
