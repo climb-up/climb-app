@@ -1,26 +1,21 @@
 import { Text, type TextProps, StyleSheet } from "react-native";
-import { Colors } from "@/constants/Colors";
+import { Colors, LightColorValues, DarkColorValues } from "@/constants/Colors";
 import { useThemeColor } from "@/hooks/useThemeColor";
 
 export type ThemedTextProps = TextProps & {
-  lightColor?: string;
-  darkColor?: string;
-  isContrast?: boolean;
+  lightColor?: LightColorValues;
+  darkColor?: DarkColorValues;
   type?: "default" | "title" | "defaultSemiBold" | "subtitle" | "link";
 };
 
 export function ThemedText({
   style,
-  lightColor = Colors.base.darkBlue500,
-  darkColor = Colors.base.silver500,
+  lightColor = Colors.light.text500,
+  darkColor = Colors.dark.text500,
   type = "default",
-  isContrast = false,
   ...rest
 }: ThemedTextProps) {
-  const color = useThemeColor(
-    { light: lightColor, dark: darkColor },
-    isContrast ? "contrastText" : "text"
-  );
+  const color = useThemeColor({ light: lightColor, dark: darkColor });
 
   return (
     <Text

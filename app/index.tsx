@@ -1,11 +1,42 @@
-import { StyleSheet, View, TouchableOpacity, Text } from "react-native";
-import { ImageBackground } from "react-native";
+import { useEffect, useState } from "react";
+import {
+  StyleSheet,
+  View,
+  TouchableOpacity,
+  Text,
+  ImageBackground,
+  ActivityIndicator,
+} from "react-native";
 import { useRouter } from "expo-router";
 import images from "@/constants/Images";
 import { Colors } from "@/constants/Colors";
+import useUserStore from "@/context/userStore";
+import { getCurrentUser } from "@/lib/appwrite";
+import { isLoading } from "expo-font";
 
 const Welcome = () => {
   const router = useRouter();
+  const { setUser, setIsLogged } = useUserStore();
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const checkAuth = async () => {
+      const user = await getCurrentUser();
+
+      if (user) {
+        setUser(user);
+        setIsLogged(true);
+        router.replace("/(tabs)/(explore)");
+      } else {
+        setUser(null);
+        setIsLogged(false);
+      }
+
+      setLoading(false);
+    };
+
+    checkAuth();
+  }, []);
 
   return (
     <View style={styles.welcomeContainer}>
@@ -13,6 +44,13 @@ const Welcome = () => {
         source={images.splashScreen}
         style={styles.welcomeContainer}
       />
+      {loading && (
+        <ActivityIndicator
+          size="large"
+          color={Colors.base.darkBlue500}
+          style={styles.loader}
+        />
+      )}
       <View style={styles.buttonsWrapper}>
         <TouchableOpacity
           onPress={() => router.push("/(auth)/sign-in")}
@@ -53,6 +91,12 @@ const styles = StyleSheet.create({
     flexDirection: "column",
     gap: 8,
     width: "100%",
+  },
+  loader: {
+    position: "absolute",
+    left: "50%",
+    top: "50%",
+    transform: "translate(-50%, -50%)",
   },
   button: {
     width: "auto",

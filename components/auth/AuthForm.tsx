@@ -7,26 +7,26 @@ import FormField from "../FormField";
 import { ThemedButton } from "../ThemedButton";
 import { Colors } from "@/constants/Colors";
 import { useColorScheme } from "react-native";
-import { ThemedSafeView } from "../ThemedSafeView";
+import { signInSchema, signUpSchema } from "./AuthForm.validation";
+import { TAuthFormProps, TFormValues, EAuthTypes } from "./AuthForm.type";
 
-type TAuthFormProps = {
-  title: string;
-  fields: { name: string; label: string; placeholder: string; type?: string }[];
-  primaryButton: { text: string; onPress: (values: any) => void };
-  secondaryButton: { text: string; onPress: () => void };
-};
 const AuthForm: React.FC<TAuthFormProps> = ({
   title,
   fields,
   primaryButton,
   secondaryButton,
+  errorMessage,
 }) => {
   const form = useForm({
-    defaultValues: fields.reduce<Record<string, string>>((acc, field) => {
-      acc[field.name] = "";
-      return acc;
-    }, {}),
-    onSubmit: (values) => console.log(values),
+    defaultValues: fields.reduce((acc, field) => {
+      return { ...acc, [field.name]: "" };
+    }, {} as TFormValues),
+    onSubmit: (values) => {
+      primaryButton.onPress(values.value);
+    },
+    validators: {
+      onSubmit: title === EAuthTypes.SIGNIN ? signInSchema : signUpSchema,
+    },
   });
 
   const theme = useColorScheme() ?? "light";
@@ -49,21 +49,39 @@ const AuthForm: React.FC<TAuthFormProps> = ({
           ]}
         ></View>
         {fields.map((fieldConfig) => (
-          <form.Field name={fieldConfig.name} key={fieldConfig.name}>
+          <form.Field name={fieldConfig.name as any} key={fieldConfig.name}>
             {(field) => (
-              //   {field.state.meta.errors ? (
-              //     <Text>{field.state.meta.errors.join(", ")}</Text>
-              //   ) : null}
-              <FormField
-                label={fieldConfig.label}
-                value={field.state.value}
-                handleChangeText={field.handleChange}
-                placeholder={fieldConfig.placeholder}
-              />
+              <>
+                <FormField
+                  label={fieldConfig.label}
+                  value={field.state.value}
+                  handleChangeText={field.handleChange}
+                  placeholder={fieldConfig.placeholder}
+                />
+                {field.state.meta.errors?.length > 0 && (
+                  <View>
+                    <ThemedText
+                      darkColor={Colors.dark.error500}
+                      lightColor={Colors.light.error500}
+                    >
+                      {field.state.meta.errors.join(", ")}
+                    </ThemedText>
+                  </View>
+                )}
+              </>
             )}
           </form.Field>
         ))}
+        {errorMessage && (
+          <ThemedText
+            darkColor={Colors.dark.error500}
+            lightColor={Colors.light.error500}
+          >
+            {errorMessage}
+          </ThemedText>
+        )}
       </View>
+
       <View style={styles.buttonsWrapper}>
         <ThemedButton
           text={primaryButton.text}

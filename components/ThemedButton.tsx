@@ -32,9 +32,9 @@ export function ThemedButton({
       primary: () => {
         return {
           backgroundColor: isLight
-            ? Colors.light.background500
+            ? Colors.light.text500
             : Colors.dark.accent500,
-          color: isLight ? Colors.light.text500 : Colors.dark.text500,
+          color: isLight ? Colors.light.background500 : Colors.dark.text500,
         };
       },
       link: () => {

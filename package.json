@@ -43,6 +43,7 @@
     "react-native-screens": "~4.4.0",
     "react-native-url-polyfill": "^2.0.0",
     "react-native-web": "~0.19.13",
+    "zod": "^3.25.0-canary.20250211T214501",
     "zustand": "^5.0.2"
   },
   "devDependencies": {

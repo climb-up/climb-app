@@ -27,28 +27,19 @@ const FormField: React.FC<FormFieldProps> = ({
 
   const theme = useColorScheme() ?? "light";
   const isLight = theme === "light";
-  const placeholderColor = isLight ? "#7b7b8b" : Colors.base.silver300;
+  const placeholderColor = Colors.base.silver300;
 
   return (
     <ThemedView style={[styles.container, otherStyles]}>
       <ThemedText style={styles.label} type="defaultSemiBold">
         {label}
       </ThemedText>
-      <ThemedView
-        style={[
-          styles.inputContainer,
-          {
-            borderColor: isLight
-              ? Colors.base.darkBlue500
-              : Colors.base.silver300,
-          },
-        ]}
-      >
+      <ThemedView style={[styles.inputContainer]} withBorder>
         <TextInput
           style={[
             styles.textInput,
             {
-              color: isLight ? Colors.base.darkBlue500 : Colors.base.silver500,
+              color: isLight ? Colors.light.text500 : Colors.dark.text500,
             },
           ]}
           value={value}
