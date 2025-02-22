@@ -1,10 +1,10 @@
 import { View, type ViewProps } from "react-native";
-
+import { Colors } from "@/constants/Colors";
 import { useThemeColor } from "@/hooks/useThemeColor";
 
 export type ThemedViewProps = ViewProps & {
-  lightColor?: string;
-  darkColor?: string;
+  lighBackgroundColor?: string;
+  darkBackgroundColor?: string;
   lightBorderColor?: string;
   darkBorderColor?: string;
   withBorder?: boolean;
@@ -12,22 +12,22 @@ export type ThemedViewProps = ViewProps & {
 
 export function ThemedView({
   style,
-  lightColor,
-  darkColor,
-  lightBorderColor,
-  darkBorderColor,
+  lighBackgroundColor = Colors.light.background500,
+  darkBackgroundColor = Colors.dark.background100,
+  lightBorderColor = Colors.light.border,
+  darkBorderColor = Colors.dark.border,
   withBorder = false,
   ...otherProps
 }: ThemedViewProps) {
-  const backgroundColor = useThemeColor(
-    { light: lightColor, dark: darkColor },
-    "background"
-  );
+  const backgroundColor = useThemeColor({
+    light: lighBackgroundColor,
+    dark: darkBackgroundColor,
+  });
 
-  const borderColor = useThemeColor(
-    { light: lightBorderColor, dark: darkBorderColor },
-    "border" // You can define this key in your Colors object
-  );
+  const borderColor = useThemeColor({
+    light: lightBorderColor,
+    dark: darkBorderColor,
+  });
 
   return (
     <View
