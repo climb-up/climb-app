@@ -1,26 +1,26 @@
-import { SafeAreaView, type ViewProps } from "react-native";
-
+import { SafeAreaView } from "react-native";
+import { Colors } from "@/constants/Colors";
 import { useThemeColor } from "@/hooks/useThemeColor";
 import { ThemedViewProps } from "./ThemedView";
 
-export function ThemedSafeView({
+export const ThemedSafeView = ({
   style,
-  lightColor,
-  darkColor,
-  lightBorderColor,
-  darkBorderColor,
+  lighBackgroundColor = Colors.light.background500,
+  darkBackgroundColor = Colors.dark.background100,
+  lightBorderColor = Colors.light.border,
+  darkBorderColor = Colors.dark.border,
   withBorder = false,
   ...otherProps
-}: ThemedViewProps) {
-  const backgroundColor = useThemeColor(
-    { light: lightColor, dark: darkColor },
-    "background"
-  );
+}: ThemedViewProps) => {
+  const backgroundColor = useThemeColor({
+    light: lighBackgroundColor,
+    dark: darkBackgroundColor,
+  });
 
-  const borderColor = useThemeColor(
-    { light: lightBorderColor, dark: darkBorderColor },
-    "border" // You can define this key in your Colors object
-  );
+  const borderColor = useThemeColor({
+    light: lightBorderColor,
+    dark: darkBorderColor,
+  });
 
   return (
     <SafeAreaView
@@ -32,4 +32,4 @@ export function ThemedSafeView({
       {...otherProps}
     />
   );
-}
+};

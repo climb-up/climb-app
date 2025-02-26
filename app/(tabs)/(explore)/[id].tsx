@@ -1,107 +1,102 @@
-import { StyleSheet } from "react-native";
-import { ThemedSafeView } from "@/components/ThemedSafeView";
-import { ThemedText } from "@/components/ThemedText";
-import { Roads } from "@/components/rock/Roads";
-import { useLocalSearchParams } from "expo-router";
 import { useEffect, useState } from "react";
 import {
   ActivityIndicator,
   Image,
   ScrollView,
   View,
-  LogBox,
+  StyleSheet,
 } from "react-native";
-import { ROCKS_DATA } from "@/constants/RocksData";
-import { TRocksData } from "@/types/rocksData";
-import { useThemeColor } from "@/hooks/useThemeColor";
+import { useLocalSearchParams } from "expo-router";
+import { ThemedSafeView } from "@/components/ThemedSafeView";
+import { ThemedText } from "@/components/ThemedText";
+import { Paths } from "@/components/rock/Paths";
+import { TRocks } from "@/types/rocksData";
 import { RockHeader } from "@/components/rock/RockHeader";
 import Weather from "@/components/rock/Weather";
+import { Colors } from "@/constants/Colors";
+import { getRock } from "@/lib/appwrite";
 
-function normalizeString(str: string | string[]) {
-  return Array.isArray(str) ? str.join(", ") : str;
-}
-
-function findMountainById(id: string) {
-  return ROCKS_DATA.find((mountain) => mountain.id === id);
-}
-
-export default function MountainPage() {
-  const iconColor = useThemeColor({}, "tint");
+export default function RockPage() {
   const { id } = useLocalSearchParams();
-  const [isLoaded, setIsLoaded] = useState(false);
-  const [mountain, setMountain] = useState<TRocksData>();
+  const [isLoading, setIsLoading] = useState(false);
+  const [rock, setRock] = useState<TRocks | null>();
 
   useEffect(() => {
-    if (!isLoaded) {
-      const mountain = findMountainById(normalizeString(id));
-      setMountain(mountain);
+    setIsLoading(true);
+    const getRocksHanlder = async (rockId: string | string[]) => {
+      const formatedRockId = Array.isArray(id) ? id[0] : id;
+      const response = await getRock(formatedRockId);
+      setRock(response);
+      setIsLoading(false);
+    };
 
-      setInterval(() => {
-        setIsLoaded(true);
-      }, 1000);
-    }
-  }, [isLoaded]);
-
-  useEffect(() => {
-    LogBox.ignoreLogs(["VirtualizedLists should never be nested"]);
+    getRocksHanlder(id);
   }, []);
 
-  if (!isLoaded) {
+  if (isLoading) {
     return (
-      <ThemedSafeView
-        style={{
-          flex: 1,
-          alignItems: "center",
-          justifyContent: "center",
-        }}
-      >
-        <ActivityIndicator size="large" color={iconColor} />
+      <ThemedSafeView style={styles.loaderWrapper}>
+        <ActivityIndicator size="large" color={Colors.base.orange500} />
       </ThemedSafeView>
     );
   }
 
   return (
-    <ThemedSafeView
-      style={{
-        flex: 1,
-        alignItems: "center",
-      }}
-    >
-      <ScrollView
-        contentContainerStyle={{ paddingHorizontal: 16, paddingVertical: 16 }}
-        style={{ width: "100%" }}
-      >
+    <ThemedSafeView style={styles.rockSaveView}>
+      <View style={styles.rockHeaderContainer}>
         <RockHeader
-          name={mountain?.name}
-          pathCount={mountain?.pathCount}
-          location={mountain?.location}
+          name={rock?.name}
+          pathCount={rock?.paths?.length}
+          location={rock?.location?.name}
         />
-        <View style={{ marginBottom: 16 }}>
-          <Image
-            source={{ uri: mountain?.backgroundImage }}
-            style={styles.image}
-          />
+      </View>
+      <ScrollView
+        contentContainerStyle={styles.rockScrollViewContainer}
+        style={styles.rockScrollView}
+      >
+        <View style={styles.imageWrapper}>
+          <Image source={{ uri: rock?.thumbnail }} style={styles.rockImage} />
         </View>
-        <ThemedText style={{ marginBottom: 8 }} type="defaultSemiBold">
+        <ThemedText style={styles.pathsLabel} type="defaultSemiBold">
           Drogi
         </ThemedText>
-        <Roads roadsData={mountain?.roads} />
-        <ThemedText style={{ marginBottom: 8 }} type="defaultSemiBold">
+        <Paths pathsData={rock?.paths ?? []} />
+        {/* <ThemedText style={{ marginBottom: 8 }} type="defaultSemiBold">
           Pogoda
         </ThemedText>
         <Weather
           longitude={mountain?.longitude}
           latitude={mountain?.latitude}
-        />
+        /> */}
       </ScrollView>
     </ThemedSafeView>
   );
 }
 
 const styles = StyleSheet.create({
-  image: {
+  loaderWrapper: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  rockSaveView: {
+    flex: 1,
+    alignItems: "center",
+  },
+  rockHeaderContainer: {
+    width: "100%",
+    paddingVertical: 16,
+    paddingHorizontal: 16,
+  },
+  rockScrollViewContainer: {
+    paddingHorizontal: 16,
+  },
+  rockScrollView: { width: "100%" },
+  imageWrapper: { marginBottom: 16 },
+  rockImage: {
     width: "100%",
     height: 400,
     borderRadius: 10,
   },
+  pathsLabel: { marginBottom: 8 },
 });

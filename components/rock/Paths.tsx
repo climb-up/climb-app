@@ -2,7 +2,7 @@ import { FlatList, View, StyleSheet, Image } from "react-native";
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedSafeView } from "../ThemedSafeView";
 import { ThemedView } from "../ThemedView";
-import { IRoadsProps, ERoadType } from "../../types/rocksData";
+import { ERoadType, TPaths } from "../../types/rocksData";
 
 // @ts-ignore
 import BoulderIcon from "../../assets/images/BoulderIcon.png";
@@ -11,9 +11,11 @@ import DrytoolIcon from "../../assets/images/DrytoolIcon.png";
 // @ts-ignore
 import TradIcon from "../../assets/images/TradIcon.png";
 
-export const Roads = (props: IRoadsProps) => {
-  const { roadsData } = props;
+type TPathsProps = {
+  pathsData: TPaths[];
+};
 
+export const Paths = ({ pathsData }: TPathsProps) => {
   const getIconForType = (type: ERoadType | undefined) => {
     switch (type) {
       case ERoadType.Boulder:
@@ -32,7 +34,7 @@ export const Roads = (props: IRoadsProps) => {
       <FlatList
         style={{ width: "100%" }}
         ItemSeparatorComponent={() => <View style={{ height: 16 }} />}
-        data={roadsData}
+        data={pathsData}
         keyExtractor={(item, index) => item.name || `road-${index}`}
         renderItem={({ item }) => (
           <ThemedView style={styles.road} withBorder={true}>
@@ -50,13 +52,14 @@ export const Roads = (props: IRoadsProps) => {
             )}
           </ThemedView>
         )}
+        scrollEnabled={false}
       />
     );
   };
 
   return (
     <ThemedSafeView style={{ marginBottom: 16 }}>
-      {roadsData && roadsData.length > 0 ? (
+      {pathsData && pathsData.length > 0 ? (
         renderRoads()
       ) : (
         <ThemedText style={styles.emptyRoadsText}>
@@ -66,6 +69,8 @@ export const Roads = (props: IRoadsProps) => {
     </ThemedSafeView>
   );
 };
+
+export default Paths;
 
 const styles = StyleSheet.create({
   road: {

@@ -1,54 +1,68 @@
 import { View, StyleSheet } from "react-native";
 import { ThemedText } from "./ThemedText";
 import { ImageBackgroundWithGradient } from "./ImageBackgroundWithGradient";
-import { Icon } from "./Icon";
-import { TRocksData } from "@/types/rocksData";
+import { ThemedIcon } from "./ThemedIcon";
+import { Colors } from "@/constants/Colors";
 
-export function ExploreMountainCard(props: TRocksData) {
+type TExploreMountainCardProps = {
+  backgroundImage: string;
+  name: string;
+  location: string;
+  pathCount: string;
+};
+
+const ExploreMountainCard = ({
+  backgroundImage,
+  name,
+  location,
+  pathCount,
+}: TExploreMountainCardProps) => {
   return (
-    <View style={styles.view}>
+    <View style={styles.cardContainer}>
       <ImageBackgroundWithGradient
-        source={{ uri: props.backgroundImage }}
-        innerStyle={styles.innerView}
+        source={{ uri: backgroundImage }}
+        innerStyle={styles.cardBackground}
       >
-        <View
-          style={{
-            display: "flex",
-            flexDirection: "row",
-            justifyContent: "space-between",
-          }}
-        >
+        <View style={styles.cardDataWrapper}>
           <View>
-            <ThemedText isContrast type="title">
-              {props.name}
+            <ThemedText type="title" lightColor={Colors.base.white500}>
+              {name}
             </ThemedText>
-            <ThemedText isContrast>
-              <Icon name="location-pin" size={13} />
-              {props.location}
+            <ThemedText lightColor={Colors.base.white500}>
+              <ThemedIcon name="location-pin" size={13} />
+              {location}
             </ThemedText>
           </View>
-          <View style={{ display: "flex", alignItems: "center" }}>
-            <ThemedText isContrast type="title">
-              {props.pathCount}
+          <View style={styles.roadsCountWrapper}>
+            <ThemedText type="title" lightColor={Colors.base.white500}>
+              {pathCount}
             </ThemedText>
-            <ThemedText isContrast>dróg</ThemedText>
+            <ThemedText lightColor={Colors.base.white500}>dróg</ThemedText>
           </View>
         </View>
       </ImageBackgroundWithGradient>
     </View>
   );
-}
+};
+
+export default ExploreMountainCard;
 
 const styles = StyleSheet.create({
-  view: {
+  cardContainer: {
     width: "100%",
     height: 200,
     borderRadius: 16,
     overflow: "hidden",
   },
-  innerView: {
+  cardBackground: {
     display: "flex",
     justifyContent: "flex-end",
     padding: 16,
   },
+  cardDataWrapper: {
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "space-between",
+  },
+  roadsCountWrapper: { display: "flex", alignItems: "center" },
 });
