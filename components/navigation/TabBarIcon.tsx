@@ -2,11 +2,13 @@
 
 import { type IconProps } from "@expo/vector-icons/build/createIconSet";
 import { type ComponentProps } from "react";
-import { Icon } from "../Icon";
+import { ThemedIcon } from "../ThemedIcon";
 
 export function TabBarIcon({
-	style,
-	...rest
-}: IconProps<ComponentProps<typeof Icon>["name"]>) {
-	return <Icon size={28} style={[{ marginBottom: -3 }, style]} {...rest} />;
+  style,
+  ...rest
+}: IconProps<ComponentProps<typeof ThemedIcon>["name"]>) {
+  return (
+    <ThemedIcon size={28} style={[{ marginBottom: -3 }, style]} {...rest} />
+  );
 }

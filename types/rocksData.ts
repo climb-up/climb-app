@@ -5,24 +5,33 @@ export enum ERoadType {
   Sport = "Sport",
 }
 
-export type TRoads = {
-  name?: string;
-  level?: string;
-  type?: ERoadType;
+export type TPaths = {
+  name: string;
+  level: string;
+  type: ERoadType;
+  rocks: TRocks[];
 };
 
-export interface IRoadsProps {
-  roadsData: TRoads[] | undefined;
-}
+type TLocation = {
+  name: string;
+  rocks: TRocks[];
+  region: TRegion;
+};
 
-export type TRocksData = {
+type TRegion = {
+  name: string;
+  rocks: TPaths;
+  locations: TLocation[];
+};
+
+export type TRocks = {
   id: string;
   name: string;
-  location: string;
-  pathCount: number;
-  backgroundImage: string;
-  nearbyMountains?: TRocksData[];
-  longitude: number;
-  latitude: number;
-  roads?: TRoads[];
+  location: TLocation;
+  thumbnail: string;
+  region?: TRegion;
+  longitude?: number;
+  latitude?: number;
+  paths?: TPaths[];
+  pathCount?: number;
 };

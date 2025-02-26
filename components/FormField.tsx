@@ -15,14 +15,14 @@ interface FormFieldProps {
   otherStyles?: object;
 }
 
-const FormField: React.FC<FormFieldProps> = ({
+const FormField = ({
   label,
   value,
   placeholder,
   handleChangeText,
   otherStyles,
   ...props
-}) => {
+}: FormFieldProps) => {
   const [showPassword, setShowPassword] = useState(false);
 
   const theme = useColorScheme() ?? "light";

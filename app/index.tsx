@@ -12,7 +12,6 @@ import images from "@/constants/Images";
 import { Colors } from "@/constants/Colors";
 import useUserStore from "@/context/userStore";
 import { getCurrentUser } from "@/lib/appwrite";
-import { isLoading } from "expo-font";
 
 const Welcome = () => {
   const router = useRouter();

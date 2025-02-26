@@ -10,13 +10,13 @@ import { useColorScheme } from "react-native";
 import { signInSchema, signUpSchema } from "./AuthForm.validation";
 import { TAuthFormProps, TFormValues, EAuthTypes } from "./AuthForm.type";
 
-const AuthForm: React.FC<TAuthFormProps> = ({
+const AuthForm = ({
   title,
   fields,
   primaryButton,
   secondaryButton,
   errorMessage,
-}) => {
+}: TAuthFormProps) => {
   const form = useForm({
     defaultValues: fields.reduce((acc, field) => {
       return { ...acc, [field.name]: "" };

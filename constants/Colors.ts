@@ -37,7 +37,7 @@ const Colors = {
     modalBackground: "#F3EFE9",
   },
   dark: {
-    text500: "#BDC2BF",
+    text500: "#FFFFFF",
     text300: "#AAB1AD",
     background100: "#0D121C",
     background300: "#1A2338",

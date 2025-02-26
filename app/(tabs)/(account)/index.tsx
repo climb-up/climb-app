@@ -1,5 +1,5 @@
 import { Alert } from "react-native";
-import { useRouter, Link } from "expo-router";
+import { useRouter } from "expo-router";
 import useUserStore from "@/context/userStore";
 import { signOut } from "@/lib/appwrite";
 import { ThemedText } from "@/components/ThemedText";

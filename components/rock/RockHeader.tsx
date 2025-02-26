@@ -1,6 +1,6 @@
-import { View } from "react-native";
+import { View, StyleSheet } from "react-native";
 import { ThemedText } from "@/components/ThemedText";
-import { Icon } from "@/components/Icon";
+import { ThemedIcon } from "../ThemedIcon";
 
 type RockHeaderProps = {
   name?: string;
@@ -8,28 +8,39 @@ type RockHeaderProps = {
   location?: string;
 };
 
-export function RockHeader(props: RockHeaderProps) {
-  const { name, pathCount, location } = props;
+export function RockHeader({ name, pathCount, location }: RockHeaderProps) {
   return (
-    <View
-      style={{
-        display: "flex",
-        flexDirection: "row",
-        justifyContent: "space-between",
-        marginBottom: 16,
-      }}
-    >
+    <View style={styles.rockHeaderWrapper}>
       <View>
         <ThemedText type="title">{name}</ThemedText>
-        <ThemedText>
-          <Icon name="location-pin" size={13} />
+        <View style={styles.rockLocationWrapper}>
+          <ThemedIcon
+            name="location-pin"
+            size={13}
+            style={styles.locationIcon}
+          />
           <ThemedText type="defaultSemiBold">{location}</ThemedText>
-        </ThemedText>
+        </View>
       </View>
-      <View style={{ display: "flex", alignItems: "center" }}>
+      <View style={styles.pathCountWrapper}>
         <ThemedText type="title">{pathCount}</ThemedText>
         <ThemedText type="defaultSemiBold">dróg</ThemedText>
       </View>
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  rockHeaderWrapper: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+  },
+  rockLocationWrapper: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  locationIcon: {
+    marginBottom: 0,
+  },
+  pathCountWrapper: { alignItems: "center" },
+});

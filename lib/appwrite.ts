@@ -10,6 +10,7 @@ import {
 } from "react-native-appwrite";
 
 import { appwriteConfig } from "./appwriteConfig";
+import { TRocks } from "@/types/rocksData";
 
 const {
   endpoint,
@@ -31,7 +32,7 @@ client
 const account = new Account(client);
 const avatars = new Avatars(client);
 const databases = new Databases(client);
-// const storage = new Storage(client);
+const storage = new Storage(client);
 
 export const createUser = async (
   email: string,
@@ -77,7 +78,6 @@ export const signIn = async (
 ): Promise<Models.Session> => {
   try {
     const session = await account.createEmailPasswordSession(email, password);
-    console.log(session);
     return session;
   } catch (error) {
     throw new Error((error as Error).message || "An unexpected error occured");
@@ -108,6 +108,44 @@ export const getCurrentUser = async () => {
     if (!currentUser.documents.length) throw Error("No current user found");
 
     return currentUser.documents[0];
+  } catch (error) {
+    console.log(error);
+    return null;
+  }
+};
+
+export const getAllRocks = async () => {
+  try {
+    const rocks = await databases.listDocuments(databaseId, rocksCollectionId);
+    return rocks.documents;
+  } catch (error) {
+    console.log(error);
+    return null;
+  }
+};
+
+export const getRock = async (rockId: string) => {
+  try {
+    const rock = await databases.getDocument(
+      databaseId,
+      rocksCollectionId,
+      rockId
+    );
+
+    if (!rock) throw Error("No rock found");
+
+    const rockData: TRocks = {
+      id: rock.$id,
+      name: rock.name,
+      thumbnail: rock.thumbnail,
+      location: rock.location,
+      region: rock.region,
+      paths: rock.paths,
+      longitude: rock.longitude,
+      latitude: rock.latitude,
+    };
+
+    return rockData;
   } catch (error) {
     console.log(error);
     return null;
