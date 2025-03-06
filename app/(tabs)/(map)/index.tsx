@@ -1,38 +1,42 @@
-import { useRef, useState, useEffect } from "react";
-import { ThemedSafeView } from "@/components/ThemedSafeView";
-import { ThemedText } from "@/components/ThemedText";
-import { StyleSheet, Image, LogBox } from "react-native";
+import { useRef, useState } from "react";
+import {
+  StyleSheet,
+  Image,
+  TouchableOpacity,
+  ActivityIndicator,
+  Alert,
+} from "react-native";
+import { useRouter } from "expo-router";
 import MapView from "react-native-maps";
 import { Marker } from "react-native-maps";
-import { Modalize } from "react-native-modalize";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
+import { Modalize } from "react-native-modalize";
+import { ThemedView } from "@/components/ThemedView";
+import { ThemedText } from "@/components/ThemedText";
+import { RockHeader } from "@/components/rock/RockHeader";
+import { Paths } from "@/components/rock/Paths";
 import { Colors } from "@/constants/Colors";
 import { useColorScheme } from "@/hooks/useColorScheme";
-import { RockHeader } from "@/components/rock/RockHeader";
-import { Roads } from "../../../components/rock/Roads";
-import { useRouter } from "expo-router";
-import { TouchableOpacity } from "react-native";
-import { ROCKS_DATA } from "../../../constants/RocksData";
-import { TRoads } from "@/types/rocksData";
+import { TPaths, TLocation } from "@/types/rocksData";
+import { useGetRocks } from "@/lib/tanstack-query/queries";
 
 type TRockModalData = {
   id: string;
   name: string;
   pathCount: number;
-  location: string;
+  location: TLocation;
   backgroundImage: string;
-  roads: TRoads[];
+  paths: TPaths[];
 } | null;
 
-export default function Index() {
+const Index = () => {
   const [activeMarker, setActiveMarker] = useState<TRockModalData>(null);
+
   const router = useRouter();
   const modalizeRef = useRef<Modalize>(null);
-  const colorScheme = useColorScheme();
+  const markerRefs = useRef(new Map());
 
-  const navigateToExplore = (id: string) => {
-    router.push(`/(tabs)/(explore)/${id}`);
-  };
+  const { data, isLoading, isError } = useGetRocks();
 
   const onOpenModal = (id: string) => {
     handleActiveMarker(id);
@@ -40,46 +44,51 @@ export default function Index() {
   };
 
   const handleActiveMarker = (id: string) => {
-    const activeMarkerData = ROCKS_DATA.find((rock) => rock.id === id);
+    const activeMarkerData = data?.documents.find((rock) => rock.$id === id);
     if (!activeMarkerData) return;
     setActiveMarker({
       id: id,
       name: activeMarkerData.name,
-      pathCount: activeMarkerData.pathCount,
+      pathCount: activeMarkerData.paths.length,
       location: activeMarkerData.location,
-      backgroundImage: activeMarkerData.backgroundImage,
-      roads: activeMarkerData.roads ?? [],
+      backgroundImage: activeMarkerData.thumbnail,
+      paths: activeMarkerData.paths ?? [],
     });
   };
 
-  useEffect(() => {
-    LogBox.ignoreLogs(["VirtualizedLists should never be nested"]);
-  }, []);
+  const theme = useColorScheme() ?? "light";
+  const isLight = theme === "light";
+
+  if (isError) {
+    Alert.alert("Błąd", "Wystąpił błąd podczas ładowania danych");
+  }
 
   return (
-    <GestureHandlerRootView style={{ flex: 1 }}>
-      <ThemedSafeView>
+    <GestureHandlerRootView style={styles.mapContainer}>
+      <ThemedView>
         <Modalize
           ref={modalizeRef}
-          snapPoint={400}
+          snapPoint={500}
           modalStyle={{
             ...styles.modal,
-            backgroundColor: Colors[colorScheme ?? "light"].background,
+            backgroundColor: isLight
+              ? Colors.light.background500
+              : Colors.dark.background100,
           }}
         >
           <RockHeader
             name={activeMarker?.name}
             pathCount={activeMarker?.pathCount}
-            location={activeMarker?.location}
+            location={activeMarker?.location?.name ?? ""}
           />
 
           <Image
             source={{ uri: activeMarker?.backgroundImage }}
             style={styles.modalRockImage}
           />
-          <Roads roadsData={activeMarker ? activeMarker.roads : []} />
+          <Paths pathsData={activeMarker ? activeMarker.paths : []} />
           <TouchableOpacity
-            onPress={() => navigateToExplore(activeMarker?.id ?? "0")}
+            onPress={() => router.push(`/(tabs)/(explore)/${activeMarker?.id}`)}
           >
             <ThemedText style={styles.rockLink}>Zobacz profil</ThemedText>
           </TouchableOpacity>
@@ -93,45 +102,57 @@ export default function Index() {
           }}
           style={styles.map}
         >
-          {ROCKS_DATA.map((marker, index) => (
-            <Marker
-              key={index}
-              coordinate={{
-                latitude: +marker.latitude,
-                longitude: +marker.longitude,
-              }}
-              onPress={() => onOpenModal(marker.id)}
-            />
-          ))}
+          {isLoading && !data ? (
+            <ActivityIndicator size="large" color={Colors.base.orange500} />
+          ) : (
+            data?.documents.map((marker, index) => {
+              return (
+                <Marker
+                  key={index}
+                  ref={(ref) => {
+                    if (ref) markerRefs.current.set(marker.$id, ref);
+                  }}
+                  coordinate={{
+                    latitude: marker.latitude,
+                    longitude: marker.longitude,
+                  }}
+                  onPress={() => onOpenModal(marker.$id)}
+                />
+              );
+            })
+          )}
         </MapView>
-      </ThemedSafeView>
+      </ThemedView>
     </GestureHandlerRootView>
   );
-}
+};
+
+export default Index;
+
 const styles = StyleSheet.create({
+  mapContainer: {
+    flex: 1,
+  },
   map: {
     width: "100%",
     height: "100%",
   },
   modal: {
-    display: "flex",
-    marginTop: 52,
+    marginTop: 80,
     padding: 16,
   },
   headerWrapper: {
-    display: "flex",
     flexDirection: "row",
     justifyContent: "space-between",
   },
   regionWrapper: {
-    display: "flex",
     gap: 2,
   },
   modalRockImage: {
     height: 300,
     resizeMode: "cover",
     borderRadius: 24,
-    marginBottom: 16,
+    marginVertical: 16,
   },
   rockLink: {
     textAlign: "center",

@@ -1,8 +1,8 @@
 export enum ERoadType {
-  Boulder = "Boulder",
-  Trad = "Trad",
-  Drytool = "Drytool",
-  Sport = "Sport",
+  BOULDER = "boulder",
+  TRAD = "trad",
+  DRYTOOL = "drytool",
+  SPORT = "sport",
 }
 
 export type TPaths = {
@@ -12,7 +12,7 @@ export type TPaths = {
   rocks: TRocks[];
 };
 
-type TLocation = {
+export type TLocation = {
   name: string;
   rocks: TRocks[];
   region: TRegion;

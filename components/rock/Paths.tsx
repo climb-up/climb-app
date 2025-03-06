@@ -1,39 +1,68 @@
-import { FlatList, View, StyleSheet, Image } from "react-native";
+import {
+  FlatList,
+  View,
+  StyleSheet,
+  Image,
+  useColorScheme,
+} from "react-native";
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedSafeView } from "../ThemedSafeView";
 import { ThemedView } from "../ThemedView";
 import { ERoadType, TPaths } from "../../types/rocksData";
 
 // @ts-ignore
-import BoulderIcon from "../../assets/images/BoulderIcon.png";
+import BoulderIconLight from "../../assets/icons/climbing-styles/BoulderIconLight.png";
 // @ts-ignore
-import DrytoolIcon from "../../assets/images/DrytoolIcon.png";
+import BoulderIconDark from "../../assets/icons/climbing-styles/BoulderIconDark.png";
 // @ts-ignore
-import TradIcon from "../../assets/images/TradIcon.png";
+import DrytoolIconLight from "../../assets/icons/climbing-styles/DrytoolIconLight.png";
+//@ts-ignore
+import DrytoolIconDark from "../../assets/icons/climbing-styles/DrytoolIconDark.png";
+// @ts-ignore
+import TradIconDark from "../../assets/icons/climbing-styles/TradIconDark.png";
+// @ts-ignore
+import TradIconLight from "../../assets/icons/climbing-styles/TradIconLight.png";
+// @ts-ignore
+import SportIconLight from "../../assets/icons/climbing-styles/SportIconLight.png";
+// @ts-ignore
+import SportIconDark from "../../assets/icons/climbing-styles/SportIconDark.png";
 
 type TPathsProps = {
   pathsData: TPaths[];
 };
 
 export const Paths = ({ pathsData }: TPathsProps) => {
+  const theme = useColorScheme() ?? "light";
+
+  const ICONS = {
+    [ERoadType.BOULDER]: {
+      light: BoulderIconDark,
+      dark: BoulderIconLight,
+    },
+    [ERoadType.TRAD]: {
+      light: TradIconDark,
+      dark: TradIconLight,
+    },
+    [ERoadType.DRYTOOL]: {
+      light: DrytoolIconDark,
+      dark: DrytoolIconLight,
+    },
+    [ERoadType.SPORT]: {
+      light: SportIconDark,
+      dark: SportIconLight,
+    },
+  };
+
   const getIconForType = (type: ERoadType | undefined) => {
-    switch (type) {
-      case ERoadType.Boulder:
-        return BoulderIcon;
-      case ERoadType.Trad:
-        return TradIcon;
-      case ERoadType.Drytool:
-        return DrytoolIcon;
-      default:
-        return null;
-    }
+    if (!type || !ICONS[type]) return null;
+    return ICONS[type][theme];
   };
 
   const renderRoads = () => {
     return (
       <FlatList
-        style={{ width: "100%" }}
-        ItemSeparatorComponent={() => <View style={{ height: 16 }} />}
+        style={styles.pathsList}
+        ItemSeparatorComponent={() => <View style={styles.pathsDivider} />}
         data={pathsData}
         keyExtractor={(item, index) => item.name || `road-${index}`}
         renderItem={({ item }) => (
@@ -73,6 +102,12 @@ export const Paths = ({ pathsData }: TPathsProps) => {
 export default Paths;
 
 const styles = StyleSheet.create({
+  pathsList: {
+    width: "100%",
+  },
+  pathsDivider: {
+    height: 16,
+  },
   road: {
     display: "flex",
     flexDirection: "row",
