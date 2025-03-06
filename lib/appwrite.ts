@@ -117,10 +117,13 @@ export const getCurrentUser = async () => {
 export const getAllRocks = async () => {
   try {
     const rocks = await databases.listDocuments(databaseId, rocksCollectionId);
-    return rocks.documents;
+
+    if (!rocks) {
+      throw Error;
+    }
+    return rocks;
   } catch (error) {
     console.log(error);
-    return null;
   }
 };
 

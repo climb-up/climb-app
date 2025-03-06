@@ -64,10 +64,7 @@ export default function RockPage() {
         {/* <ThemedText style={{ marginBottom: 8 }} type="defaultSemiBold">
           Pogoda
         </ThemedText>
-        <Weather
-          longitude={mountain?.longitude}
-          latitude={mountain?.latitude}
-        /> */}
+        <Weather longitude={rock?.longitude} latitude={rock?.latitude} /> */}
       </ScrollView>
     </ThemedSafeView>
   );

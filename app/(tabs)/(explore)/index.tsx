@@ -1,4 +1,3 @@
-import { useEffect, useState } from "react";
 import {
   FlatList,
   Pressable,
@@ -7,47 +6,42 @@ import {
   ActivityIndicator,
 } from "react-native";
 import { Link } from "expo-router";
-import { Models } from "react-native-appwrite";
 import { ThemedSafeView } from "@/components/ThemedSafeView";
 import ExploreMountainCard from "@/components/ExploreMountainCard";
 import { ThemedText } from "@/components/ThemedText";
-import { getAllRocks } from "@/lib/appwrite";
 import { Colors } from "@/constants/Colors";
+import { useGetRocks } from "@/lib/tanstack-query/queries";
 
 const Index = () => {
-  const [isLoading, setIsLoading] = useState(false);
-  const [rocks, setRocks] = useState<Models.Document[] | null>([]);
-
-  useEffect(() => {
-    setIsLoading(true);
-    const getRocksHanlder = async () => {
-      const response = await getAllRocks();
-      setRocks(response);
-      setIsLoading(false);
-    };
-
-    getRocksHanlder();
-  }, []);
+  const { data, isLoading, isError } = useGetRocks();
 
   if (isLoading) {
     return (
-      <ThemedSafeView style={styles.loaderWrapper}>
+      <ThemedSafeView style={styles.errorLoaderWrapper}>
         <ActivityIndicator size="large" color={Colors.base.orange500} />
       </ThemedSafeView>
     );
   }
 
+  if (isError) {
+    return (
+      <ThemedSafeView style={styles.errorLoaderWrapper}>
+        <ThemedText type="default">Coś poszło nie tak</ThemedText>
+      </ThemedSafeView>
+    );
+  }
+
   return (
-    <ThemedSafeView style={styles.exploreContainer}>
+    <ThemedSafeView style={styles.exploreSaveView}>
       <ThemedText type="title" style={styles.header}>
         Odkrywaj
       </ThemedText>
-      {rocks && (
+      {data?.documents && (
         <FlatList
           style={styles.exploreList}
           contentContainerStyle={styles.listContentContainer}
           ItemSeparatorComponent={() => <View style={styles.listSeparator} />}
-          data={rocks}
+          data={data.documents}
           keyExtractor={(item) => item.$id}
           renderItem={({ item }) => (
             <Link
@@ -76,12 +70,12 @@ const Index = () => {
 export default Index;
 
 const styles = StyleSheet.create({
-  loaderWrapper: {
+  errorLoaderWrapper: {
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
   },
-  exploreContainer: {
+  exploreSaveView: {
     flex: 1,
     alignItems: "center",
   },
