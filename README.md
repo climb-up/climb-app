@@ -1,50 +1,18 @@
-# Welcome to your Expo app 👋
+# ClimbUp 🧗‍♂️
+A dedicated app for rock climbing enthusiasts that provides detailed topos—interactive maps of climbing rocks and routes. Users can explore nearby climbing spots, view route details, and download topos for offline use, ensuring full access even in remote areas with no internet connection.
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+## Application is still in development. We are actively working on building the topo database and refining core features to support climbers in the field 👷🏻‍♂️
 
-## Get started
+### Explore screen and rock profile
+<img src="https://github.com/user-attachments/assets/8b51f036-67cd-4c07-bc69-07816717c0dc" width="300" />
+<img src="https://github.com/user-attachments/assets/20dc74ea-ea44-4493-96ac-4134a1d58d21" width="300" />
+<img src="https://github.com/user-attachments/assets/596f6b2b-14fc-4268-ac13-1ee182c56866" width="300" />
 
-1. Install dependencies
+### Map screen
+<img src="https://github.com/user-attachments/assets/9465ac2b-87bb-40bb-bb5d-ea10e7e1d7de" width="300" />
+<img src="https://github.com/user-attachments/assets/7dd6d98c-4f8b-40da-bab5-723b74915d32" width="300" />
 
-   ```bash
-   npm install
-   ```
-
-2. Start the app
-
-   ```bash
-    npx expo start
-   ```
-
-In the output, you'll find options to open the app in a
-
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
-
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
-
-## Get a fresh project
-
-When you're ready, run:
-
-```bash
-npm run reset-project
-```
-
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
-
-## Learn more
-
-To learn more about developing your project with Expo, look at the following resources:
-
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
-
-## Join the community
-
-Join our community of developers creating universal apps.
-
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+### Login screen
+<img src="https://github.com/user-attachments/assets/cccda7b4-4c56-40b5-9c04-52ac408e844d" alt="description" width="300"/>
+<img src="https://github.com/user-attachments/assets/430bca35-ba4a-4898-a2c1-40a8557a3fc2" width="300" />
+<img src="https://github.com/user-attachments/assets/6b7a58fc-5a9e-41de-8a55-44e3323e286b" width="300" />
