@@ -117,6 +117,7 @@ export const getCurrentUser = async () => {
 export const getAllRocks = async () => {
   try {
     const rocks = await databases.listDocuments(databaseId, rocksCollectionId);
+    console.log(rocks);
 
     if (!rocks) {
       throw Error;
@@ -135,22 +136,10 @@ export const getRock = async (rockId: string) => {
       rockId
     );
 
-    if (!rock) throw Error("No rock found");
+    if (!rock) throw Error;
 
-    const rockData: TRocks = {
-      id: rock.$id,
-      name: rock.name,
-      thumbnail: rock.thumbnail,
-      location: rock.location,
-      region: rock.region,
-      paths: rock.paths,
-      longitude: rock.longitude,
-      latitude: rock.latitude,
-    };
-
-    return rockData;
+    return rock;
   } catch (error) {
     console.log(error);
-    return null;
   }
 };

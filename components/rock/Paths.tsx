@@ -4,6 +4,7 @@ import {
   StyleSheet,
   Image,
   useColorScheme,
+  TouchableOpacity,
 } from "react-native";
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedSafeView } from "../ThemedSafeView";
@@ -29,9 +30,10 @@ import SportIconDark from "../../assets/icons/climbing-styles/SportIconDark.png"
 
 type TPathsProps = {
   pathsData: TPaths[];
+  onPathClick: (topo: string, id: string) => void;
 };
 
-export const Paths = ({ pathsData }: TPathsProps) => {
+export const Paths = ({ pathsData, onPathClick }: TPathsProps) => {
   const theme = useColorScheme() ?? "light";
 
   const ICONS = {
@@ -58,38 +60,40 @@ export const Paths = ({ pathsData }: TPathsProps) => {
     return ICONS[type][theme];
   };
 
-  const renderRoads = () => {
-    return (
-      <FlatList
-        style={styles.pathsList}
-        ItemSeparatorComponent={() => <View style={styles.pathsDivider} />}
-        data={pathsData}
-        keyExtractor={(item, index) => item.name || `road-${index}`}
-        renderItem={({ item }) => (
-          <ThemedView style={styles.road} withBorder={true}>
-            <View style={styles.nameLevel}>
-              <ThemedText style={styles.nameLevelText}>{item.name}</ThemedText>
-              <ThemedText style={styles.nameLevelText}>{item.level}</ThemedText>
-            </View>
-
-            {item.type && (
-              <Image
-                source={getIconForType(item.type)}
-                style={styles.typeIcon}
-                resizeMode={"contain"}
-              />
-            )}
-          </ThemedView>
-        )}
-        scrollEnabled={false}
-      />
-    );
-  };
-
   return (
     <ThemedSafeView style={{ marginBottom: 16 }}>
-      {pathsData && pathsData.length > 0 ? (
-        renderRoads()
+      {pathsData.length > 0 ? (
+        <FlatList
+          style={styles.pathsList}
+          ItemSeparatorComponent={() => <View style={styles.pathsDivider} />}
+          data={pathsData}
+          keyExtractor={(item, index) => item.name || `road-${index}`}
+          renderItem={({ item }) => (
+            <TouchableOpacity onPress={() => onPathClick(item.topo, item.id)}>
+              <ThemedView style={styles.road} withBorder={true}>
+                <View style={styles.nameLevel}>
+                  <ThemedText style={styles.nameLevelText}>
+                    {item.name}
+                  </ThemedText>
+                  <ThemedText style={styles.nameLevelText}>
+                    {item.level}
+                  </ThemedText>
+                </View>
+                <View style={styles.iconsWrapper}>
+                  {item.type?.map((itemType) => (
+                    <Image
+                      key={itemType}
+                      source={getIconForType(itemType)}
+                      style={styles.typeIcon}
+                      resizeMode="contain"
+                    />
+                  ))}
+                </View>
+              </ThemedView>
+            </TouchableOpacity>
+          )}
+          scrollEnabled={false}
+        />
       ) : (
         <ThemedText style={styles.emptyRoadsText}>
           Nie znaleziono dróg dla tej skały
@@ -124,6 +128,10 @@ const styles = StyleSheet.create({
   },
   nameLevelText: {
     fontWeight: 600,
+  },
+  iconsWrapper: {
+    display: "flex",
+    gap: 2,
   },
   typeIcon: {
     height: 30,

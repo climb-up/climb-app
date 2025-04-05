@@ -67,8 +67,6 @@ const Index = () => {
     <GestureHandlerRootView style={styles.mapContainer}>
       <ThemedView>
         <Modalize
-          ref={modalizeRef}
-          snapPoint={500}
           modalStyle={{
             ...styles.modal,
             backgroundColor: isLight

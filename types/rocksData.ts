@@ -6,10 +6,12 @@ export enum ERoadType {
 }
 
 export type TPaths = {
+  id: string;
   name: string;
   level: string;
-  type: ERoadType;
+  type: ERoadType[];
   rocks: TRocks[];
+  topo: string;
 };
 
 export type TLocation = {
